@@ -1,0 +1,32 @@
+# 设定ftl文件路径
+freemarker:
+  template-loader-path: classpath:/templates/
+  cache: false
+  charset:  UTF-8
+  check-template-location: true
+  content-type: text/html
+  expose-request-attributes: false
+  expose-session-attributes: false
+  request-context-attributes: request
+  suffix: .ftl
+
+#配置数据源
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3306/community?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2b8
+
+
+#配置mybatis-plus
+mybatis-plus:
+  # 实体类扫描路径
+  type-aliases-package: com.sourire.community.entity
+  # xml 扫描路径
+  mapper-locations: classpath:com/sourire/community/xml/*.xml
+  configuration:
+    jdbc-type-for-null: null
+  global-config:
+    # 关闭 mybatis-plus的 banner
+    banner: false
