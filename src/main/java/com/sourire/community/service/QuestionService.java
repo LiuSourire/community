@@ -1,9 +1,8 @@
 package com.sourire.community.service;
 
 import com.sourire.community.dto.QuestionDTO;
-import com.sourire.community.entity.User;
+import com.sourire.community.entity.Question;
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -13,9 +12,12 @@ import java.util.List;
  * </p>
  *
  * @author sourire
- * @since 2019-08-27
+ * @since 2019-08-28
  */
-@Service
-public interface UserService extends IService<User> {
-
+public interface QuestionService extends IService<Question> {
+    /**
+     * 获取问题列表
+     * @return
+     */
+    public List<QuestionDTO> getList();
 }

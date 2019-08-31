@@ -27,6 +27,7 @@ mybatis-plus:
   mapper-locations: classpath:com/sourire/community/xml/*.xml
   configuration:
     jdbc-type-for-null: null
-  global-config:
-    # 关闭 mybatis-plus的 banner
-    banner: false
+    global-config:
+      # 关闭 mybatis-plus的 banner
+      banner: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

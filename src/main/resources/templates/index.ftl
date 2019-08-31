@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <#assign base=springMacroRequestContext.contextPath />
 <head>
-    <title>码匠社区</title>
+    <title>爪巴社区</title>
     <!--<head th:insert="~{import :: head}"></head>-->
     <#include "${base}/import.ftl">
 </head>
@@ -17,11 +17,11 @@
 <body>
 <!--<div th:insert="~{navigation :: nav}"></div>-->
 <#include "${base}/navigation.ftl">
-<#--<div class="container-fluid main">
+<div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <h3><span class="glyphicon glyphicon-list" aria-hidden="true"></span> 发现</h3>
-            <ul class="nav nav-tabs">
+            <#--<ul class="nav nav-tabs">
                 <li role="presentation" th:class="${sort == 'new' || sort == '' ? 'active':''}">
                     <a th:href="@{/(sort='new')}">最新</a>
                 </li>
@@ -37,25 +37,26 @@
                 <li role="presentation" th:class="${sort == 'no' ? 'active':''}">
                     <a th:href="@{/(sort='no')}" class="red">消灭零回复</a>
                 </li>
-            </ul>
-
-            <div class="media" th:each="question : ${pagination.data}">
-                <div class="media-left">
-                    <a href="#">
-                        <img class="media-object img-rounded"
-                             th:src="${question.user.avatarUrl}">
-                    </a>
+            </ul>-->
+            <#list questions as question>
+                <div class="media">
+                    <div class="media-left">
+                        <a href="#">
+                            <img class="media-object img-rounded"
+                                 src="${question.user.avatarUrl}">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading">
+                            <a href="/question/'+ ${question.id}">${question.title}</a>
+                        </h4>
+                        <span class="text-desc"><span>${(question.commentCount)!0}</span> 个回复 •
+                            <span>${(question.viewCount)!0}</span> 次浏览 •
+                            <span>${question.gmtCreate?string("yyyy-MM-dd hh:mm:ss")}</span></span>
+                    </div>
                 </div>
-                <div class="media-body">
-                    <h4 class="media-heading">
-                        <a th:href="@{'/question/'+ ${question.id}}" th:text="${question.title}"></a>
-                    </h4>
-                    <span class="text-desc"><span th:text="${question.commentCount}"></span> 个回复 • <span
-                            th:text="${question.viewCount}"></span> 次浏览 • <span
-                            th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span></span>
-                </div>
-            </div>
-            <nav aria-label="Page navigation">
+            </#list>
+            <#--<nav aria-label="Page navigation">
                 <ul class="pagination">
                     <li th:if="${pagination.showFirstPage}">
                         <a th:href="@{/(page=1,search=${search},tag=${tag},sort=${sort})}" aria-label="Previous">
@@ -86,11 +87,11 @@
                         </a>
                     </li>
                 </ul>
-            </nav>
+            </nav>-->
         </div>
-        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+        <#--<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <div th:insert="~{side :: side}"></div>
-            <!--相关问题&ndash;&gt;
+            相关问题&ndash;&gt;
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h4>热门标签</h4>
@@ -100,9 +101,9 @@
                     </li>
                 </ul>
             </div>
-        </div>
+        </div>-->
     </div>
-</div>-->
+</div>
 <!--<div th:insert="~{footer :: foot}"></div>-->
 <#include "${base}/footer.ftl">
 </body>

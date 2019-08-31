@@ -40,7 +40,7 @@ public class MpGenerator {
           .setRestControllerStyle(true)
           //.setSuperControllerClass("com.sourire.BaseController")
           .setSuperEntityColumns("id")
-          .setInclude("user")
+          .setInclude("question")
           .setControllerMappingHyphenStyle(true);
 		//4.包名配置
 		PackageConfig pc = new PackageConfig();

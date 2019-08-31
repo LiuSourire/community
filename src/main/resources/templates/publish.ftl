@@ -20,17 +20,15 @@
                 <div class="form-group">
                     <label for="title">问题标题（简单扼要）:</label>
                     <input type="text" class="form-control" id="title" name="title"
-                           placeholder="问题标题……"
+                           placeholder="问题标题……" value="${(question.title)!""}"
                            autocomplete="off">
                 </div>
                 <div class="form-group" id="question-editor">
                     <label for="description">问题补充 (必填，请参照右侧提示):</label>
-                    <textarea name="description" id="description"  style="display:none;"
-                              class="form-control"
-                              cols="30"
-                              rows="10"></textarea>
+                    <textarea name="description" id="description"  <#--style="display:none;"-->
+                              class="form-control" cols="30" rows="10">${(question.description)!""}</textarea>
                 </div>
-                <script type="text/javascript">
+                <#--<script type="text/javascript">
                     $(function () {
                         var editor = editormd("question-editor", {
                             width: "100%",
@@ -44,23 +42,24 @@
                             imageUploadURL: "/file/upload",
                         });
                     });
-                </script>
+                </script>-->
                 <div class="form-group">
                     <label for="tag">添加标签:</label>
                     <input type="text" class="form-control"  id="tag" name="tag"
+                           value="${(question.tag)!""}"
                            autocomplete="off"
                            placeholder="输入标签，以，号分隔"
-                           onclick="showSelectTag()">
-                    <div id="select-tag" class="publish-tag-tab">
+                           <#--onclick="showSelectTag()"-->>
+                    <#--<div id="select-tag" class="publish-tag-tab">
                         <ul class="nav nav-tabs" role="tablist">
-                            <#--<li role="presentation" th:each="selectCategory,selectCategoryStat: ${tags}"
+                            &lt;#&ndash;<li role="presentation" th:each="selectCategory,selectCategoryStat: ${tags}"
                                 th:class="${selectCategoryStat.first ? 'active':''}">
                                 <a th:href="${'#'+selectCategory.categoryName}" aria-controls="home" role="tab"
                                    data-toggle="tab" th:text="${selectCategory.categoryName}"></a>
-                            </li>-->
+                            </li>&ndash;&gt;
                         </ul>
                         <div class="tab-content">
-                            <#--<div role="tabpanel" th:id="${selectCategory.categoryName}"
+                            &lt;#&ndash;<div role="tabpanel" th:id="${selectCategory.categoryName}"
                                  th:each="selectCategory: ${tags}"
                                  th:class="${selectCategoryStat.first ? 'active tab-pane':'tab-pane'}">
                                 <span>
@@ -71,18 +70,19 @@
                                     </span>
                                 </span>
                                 </span>
-                            </div>-->
+                            </div>&ndash;&gt;
                         </div>
-                    </div>
+                    </div>-->
                 </div>
 
                 <div class="container-fluid main ">
                     <div class="row">
                         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-                            <div class="alert alert-danger col-lg-12 col-md-12 col-sm-12 col-xs-12"
-                                 <#--th:text="${error}"
-                                 th:if="${error != null}"-->>
-                            </div>
+                            <#if (error)??>
+                                <div class="alert alert-danger col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    ${error}
+                                </div>
+                            </#if>
                         </div>
                         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
                             <button type="submit" class="btn btn-success btn-publish ">

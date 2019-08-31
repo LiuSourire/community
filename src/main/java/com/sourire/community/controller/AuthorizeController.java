@@ -47,6 +47,7 @@ public class AuthorizeController {
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         System.out.println(accessToken);
         GithubUser githubUser = githubProvider.getUser(accessToken);
+
         //持久化登录态,如果获取到的github用户不为空，就保存到数据库里，并将token写入到cookie
         if(null != githubUser){
             //判断是否为第一次登录
@@ -58,6 +59,7 @@ public class AuthorizeController {
                 user.setToken(UUID.randomUUID().toString());
                 user.setName(githubUser.getLogin());
                 user.setGmtCreate(new Date());
+                user.setAvatarUrl(githubUser.getAvatarUrl());
                 userService.save(user);
             }
             //不是第一次登录直接从数据库中取token
@@ -67,15 +69,15 @@ public class AuthorizeController {
     }
 
     @RequestMapping("/logout")
-    public String logout(HttpServletRequest req){
+    public String logout(HttpServletRequest req,HttpServletResponse response){
         req.getSession().invalidate();
         Cookie[] cookies = req.getCookies();
         for (Cookie cookie : cookies) {
             if(cookie.getName().equals("token")){
-                cookie.setValue(null);
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
                 break;
             }
-
         }
         return "redirect:/";
     }
