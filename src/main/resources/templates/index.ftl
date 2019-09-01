@@ -38,7 +38,7 @@
                     <a th:href="@{/(sort='no')}" class="red">消灭零回复</a>
                 </li>
             </ul>-->
-            <#list questions as question>
+            <#list pagination.questionDTOS as question>
                 <div class="media">
                     <div class="media-left">
                         <a href="#">
@@ -56,38 +56,46 @@
                     </div>
                 </div>
             </#list>
-            <#--<nav aria-label="Page navigation">
+            <nav aria-label="Page navigation">
                 <ul class="pagination">
-                    <li th:if="${pagination.showFirstPage}">
-                        <a th:href="@{/(page=1,search=${search},tag=${tag},sort=${sort})}" aria-label="Previous">
-                            <span aria-hidden="true">&lt;&lt;</span>
-                        </a>
-                    </li>
-                    <li th:if="${pagination.showPrevious}">
-                        <a th:href="@{/(page=${pagination.page - 1},search=${search},tag=${tag},sort=${sort})}"
-                           aria-label="Previous">
-                            <span aria-hidden="true">&lt;</span>
-                        </a>
-                    </li>
-
-                    <li th:each="page : ${pagination.pages}" th:class="${pagination.page == page}? 'active' : ''">
-                        <a th:href="@{/(page=${page},search=${search},tag=${tag},sort=${sort})}" th:text="${page}"></a>
-                    </li>
-
-                    <li th:if="${pagination.showNext}">
-                        <a th:href="@{/(page=${pagination.page +1 },search=${search},tag=${tag},sort=${sort})}"
-                           aria-label="Previous">
-                            <span aria-hidden="true">&gt;</span>
-                        </a>
-                    </li>
-                    <li th:if="${pagination.showEndPage}">
-                        <a th:href="@{/(page=${pagination.totalPage},search=${search},tag=${tag},sort=${sort})}"
-                           aria-label="Previous">
-                            <span aria-hidden="true">&gt;&gt;</span>
-                        </a>
-                    </li>
+                    <#if pagination.showFirstPage>
+                        <li>
+                            <a href="/?current=1" aria-label="Previous">
+                                <span aria-hidden="true">&lt;&lt;</span>
+                            </a>
+                        </li>
+                    </#if>
+                    <#if pagination.showPrev>
+                        <li>
+                            <a href="/?current=${pagination.current - 1}"
+                               aria-label="Previous">
+                                <span aria-hidden="true">&lt;</span>
+                            </a>
+                        </li>
+                    </#if>
+                    <#list pagination.pages as page>
+                        <li ${(pagination.current == page)?string("class='active'","")}>
+                            <a href="/?current=${page}" >${page}</a>
+                        </li>
+                    </#list>
+                    <#if pagination.showNext>
+                        <li>
+                            <a href="/?current=${pagination.current +1 }"
+                               aria-label="Previous">
+                                <span aria-hidden="true">&gt;</span>
+                            </a>
+                        </li>
+                    </#if>
+                    <#if pagination.showLastPage>
+                        <li>
+                            <a href="/?current=${pagination.totalPage}"
+                               aria-label="Previous">
+                                <span aria-hidden="true">&gt;&gt;</span>
+                            </a>
+                        </li>
+                    </#if>
                 </ul>
-            </nav>-->
+            </nav>
         </div>
         <#--<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <div th:insert="~{side :: side}"></div>

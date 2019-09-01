@@ -1,13 +1,15 @@
 package com.sourire.community.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sourire.community.dto.Pagination;
 import com.sourire.community.dto.QuestionDTO;
 import com.sourire.community.entity.Question;
 import com.sourire.community.entity.User;
 import com.sourire.community.mapper.QuestionMapper;
 import com.sourire.community.mapper.UserMapper;
 import com.sourire.community.service.QuestionService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,17 +35,38 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     private QuestionMapper questionMapper;
 
     @Override
-    public List<QuestionDTO> getList(){
-        List<Question> list = questionMapper.selectList(null);
+    public List<QuestionDTO> selectListByPage(Integer offset ,Integer size){
+        List<Question> questions = null;
+        //如果查询记录数在1000条之外，则使用高效分页方法
+        if (offset > 1000) {
+            questions = questionMapper.selectListByPageEffcient(offset, size);
+        } else {
+            questions = questionMapper.selectListByPage(offset, size);
+        }
         List<QuestionDTO> questionDTOS = new ArrayList<>();
-        for (Question question : list) {
+        for (Question question : questions) {
             Long userId = question.getCreator();
             User user = userMapper.selectOne(new QueryWrapper<User>().eq("id", userId));
             QuestionDTO questionDTO = new QuestionDTO();
-            BeanUtils.copyProperties(question,questionDTO);
+            BeanUtils.copyProperties(question, questionDTO);
             questionDTO.setUser(user);
             questionDTOS.add(questionDTO);
         }
         return questionDTOS;
+    }
+
+    @Override
+    public Pagination<QuestionDTO> questionPage(Integer currentPage,Integer size) {
+        //查出记录总数
+        Integer total = questionMapper.selectCount(null);
+        //创建分页对象
+        Pagination<QuestionDTO> pagination = new Pagination<>(currentPage,size,total);
+        //计算偏移量
+        Integer offset = (pagination.getCurrent()-1) * size;
+        //查询list集合
+        List<QuestionDTO> questionDTOS = selectListByPage(offset, size);
+        //将集合放入分页对象中
+        pagination.setQuestionDTOS(questionDTOS);
+        return pagination;
     }
 }
