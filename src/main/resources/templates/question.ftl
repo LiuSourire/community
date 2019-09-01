@@ -1,12 +1,11 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<#assign base=springMacroRequestContext.contextPath />
 <head>
-    <title th:text="${question.title}"></title>
-    <head th:insert="~{import :: head}"></head>
-    <head th:insert="~{import :: markdown}"></head>
+    <title>${question.title}</title>
+    <#include "${base}/import.ftl">
 </head>
 <body>
-<div th:insert="~{navigation :: nav}"></div>
+<#include "${base}/navigation.ftl">
 <div class="container-fluid main profile">
     <div class="row">
 
@@ -14,17 +13,17 @@
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <!--正文-->
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <h4 class="question-title"><span th:text="${question.title}"></span></h4>
+                <h4 class="question-title"><span>${question.title}</span></h4>
                 <span class="text-desc">
-                作者：<span th:text="${question.user.name}"></span> |
-                发布时间：<span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span> |
-                阅读数： <span th:text="${question.viewCount}"></span>
+                作者：<span>${question.user.name}</span> |
+                发布时间：<span>${question.gmtCreate?string("yyyy-MM-dd hh:mm")}</span> |
+                阅读数： <span>${(question.viewCount)!0}</span>
             </span>
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
                 <!--内容-->
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="question-view">
-                    <textarea style="display:none;" th:text="${question.description}"></textarea>
+                    <textarea style="display:none;">${question.description}</textarea>
                 </div>
                 <script type="text/javascript">
                     $(function () {
@@ -33,21 +32,22 @@
                 </script>
 
                 <!--标签-->
-                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <#--<hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <span class="label label-info question-tag" th:each="tag : ${question.tag.split(',')}">
                         <span class="glyphicon glyphicon-tags"></span>
                         <span class="label label-info" th:text="${tag}"></span>
                     </span>
-                </div>
+                </div>-->
 
                 <!--编辑-->
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <a th:href="@{'/publish/'+${question.id}}" class="community-menu"
-                       th:if="${session.user != null && session.user.id == question.creator}">
-                        <span class="glyphicon glyphicon-pencil" aria-hidden="true">编辑</span>
+                    <#if user?exists && user.id == question.creator>
+                    <a class="community-menu" href="${base}/publish/?id='+${question.id}}">
+                        <span aria-hidden="true" class="glyphicon glyphicon-pencil">编辑</span>
                     </a>
+                    </#if>
                 </div>
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             </div>
@@ -55,10 +55,10 @@
             <!--回复-->
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h4>
-                    <span th:text="${question.commentCount}"></span> 个回复
+                    <span>${(question.commentCount)!0}</span> 个回复
                 </h4>
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment-sp">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comments" th:each="comment : ${comments}">
+                <#--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comments" th:each="comment : ${comments}">
                     <div class="media">
                         <div class="media-left">
                             <a href="#">
@@ -73,32 +73,32 @@
                             <div th:text="${comment.content}"></div>
                             <div class="menu">
                                 <span class="glyphicon glyphicon-thumbs-up icon"></span>
-                                <span th:data-id="${comment.id}"
-                                      onclick="collapseComments(this)" class="comment-icon">
+                                <span class="comment-icon"
+                                      onclick="collapseComments(this)" th:data-id="${comment.id}">
                                     <span class="glyphicon glyphicon-comment"></span>
                                     <span th:text="${comment.commentCount}"></span>
                                 </span>
                                 <span class="pull-right"
                                       th:text="${#dates.format(comment.gmtCreate,'yyyy-MM-dd')}"></span>
                             </div>
-                            <!--二级评论-->
+                            <!--二级评论&ndash;&gt;
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 collapse sub-comments"
                                  th:id="${'comment-'+comment.id}">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <input type="text" class="form-control" placeholder="评论一下……"
-                                           th:id="${'input-'+comment.id}">
-                                    <button type="button" class="btn btn-success pull-right" onclick="comment(this)"
-                                            th:data-id="${comment.id}">评论
+                                    <input class="form-control" placeholder="评论一下……" th:id="${'input-'+comment.id}"
+                                           type="text">
+                                    <button class="btn btn-success pull-right" onclick="comment(this)" th:data-id="${comment.id}"
+                                            type="button">评论
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>-->
             </div>
 
             <!--回复输入框-->
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <#--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h4>
                     提交回复
                 </h4>
@@ -117,11 +117,11 @@
                             </h5>
                         </div>
                     </div>
-                    <input type="hidden" id="question_id" th:value="${question.id}">
-                    <textarea class="form-control comment" rows="6" id="comment_content"></textarea>
-                    <button type="button" class="btn btn-success btn-comment" onclick="post()">回复</button>
+                    <input id="question_id" th:value="${question.id}" type="hidden">
+                    <textarea class="form-control comment" id="comment_content" rows="6"></textarea>
+                    <button class="btn btn-success btn-comment" onclick="post()" type="button">回复</button>
                 </div>
-            </div>
+            </div>-->
 
         </div>
 
@@ -132,34 +132,33 @@
                 <div class="media">
                     <div class="media-left">
                         <a href="#">
-                            <img class="media-object img-rounded"
-                                 th:src="${question.user.avatarUrl}">
+                            <img class="media-object-left img-rounded" src="${question.user.avatarUrl}">
                         </a>
                     </div>
                     <div class="media-body">
                         <h5 class="media-heading">
-                            <span th:text="${question.user.name}"></span>
+                            <span>${question.user.name}</span>
                         </h5>
                     </div>
                 </div>
             </div>
 
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div th:insert="~{side :: side}"></div>
+            <#include "${base}/side.ftl">
 
             <!--相关问题-->
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h4>相关问题</h4>
-                <ul class="question-related">
+                <#--<ul class="question-related">
                     <li th:each="related : ${relatedQuestions}">
                         <a th:href="@{'/question/'+ ${related.id}}" th:text="${related.title}"></a>
                     </li>
-                </ul>
+                </ul>-->
             </div>
         </div>
     </div>
 </div>
-<div th:insert="~{footer :: foot}"></div>
+<#include "${base}/footer.ftl">
 </body>
 </html>

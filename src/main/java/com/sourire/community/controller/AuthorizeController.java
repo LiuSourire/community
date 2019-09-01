@@ -73,7 +73,7 @@ public class AuthorizeController {
         req.getSession().invalidate();
         Cookie[] cookies = req.getCookies();
         for (Cookie cookie : cookies) {
-            if(cookie.getName().equals("token")){
+            if("token".equals(cookie.getName())){
                 cookie.setMaxAge(0);
                 response.addCookie(cookie);
                 break;

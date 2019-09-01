@@ -1,22 +1,18 @@
 package com.sourire.community.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.sourire.community.dto.QuestionDTO;
 import com.sourire.community.entity.Question;
 import com.sourire.community.entity.User;
 import com.sourire.community.service.QuestionService;
 import com.sourire.community.service.UserService;
-import com.sourire.community.util.GetUserByCookie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
@@ -34,9 +30,6 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
     
-    @Autowired
-    private UserService userService;
-
     @GetMapping("/publish")
     public String publish(){
         return "publish";
@@ -60,10 +53,9 @@ public class QuestionController {
         }
         try {
             question.setGmtCreate(new Date());
-            Cookie[] cookies = req.getCookies();
-            User user = null;
-            if(cookies != null && cookies.length >0){
-                user = GetUserByCookie.getUserByCookie(cookies);
+            User user = (User) req.getSession().getAttribute("user");
+            if(null == user){
+                return "redirect:/";
             }
             question.setCreator(user.getId());
             questionService.save(question);
@@ -73,6 +65,17 @@ public class QuestionController {
             model.addAttribute("error",e.getMessage());
             return "publish";
         }
+    }
+
+    @GetMapping("/question/{id}")
+    public String question(@PathVariable("id") Integer id,
+                           Model model,
+                           HttpServletRequest request){
+        /*User user = (User) request.getSession().getAttribute("user");
+        model.addAttribute("user",user);*/
+        QuestionDTO questionDTO = questionService.getQuestionById(id);
+        model.addAttribute("question",questionDTO);
+        return "question";
     }
 
 }

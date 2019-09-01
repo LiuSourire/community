@@ -22,7 +22,11 @@ body {
     position: relative;
     top:10px;
 }
-
+.media-object-left{
+    width: 38px;
+    height: 38px;
+    position: relative;
+}
 .media-body {
     padding-top: 10px;
 }

@@ -48,7 +48,7 @@
                     </div>
                     <div class="media-body">
                         <h4 class="media-heading">
-                            <a href="/question/'+ ${question.id}">${question.title}</a>
+                            <a href="${base}/question/${question.id}">${question.title}</a>
                         </h4>
                         <span class="text-desc"><span>${(question.commentCount)!0}</span> 个回复 •
                             <span>${(question.viewCount)!0}</span> 次浏览 •

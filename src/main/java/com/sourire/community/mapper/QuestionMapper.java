@@ -36,4 +36,22 @@ public interface QuestionMapper extends BaseMapper<Question> {
      */
     @Select("select * from question where id > (select id from question limit ${offset},1) limit ${size}")
     List<Question> selectListByPageEffcient(@Param(value = "offset") Integer offset , @Param(value = "size") Integer size);
+
+    /**
+     * 分页查询（千条记录之外，使用此分页查询方法）
+     * @param offset 偏移量
+     * @param size 查询条数
+     * @return
+     */
+    @Select("select * from question where creator = ${id} and id > (select id from question where creator = ${id} limit ${offset},1) limit ${size}")
+    List<Question> selectListPageByUserIdEffcient(@Param(value = "id") long id, @Param(value = "offset") Integer offset , @Param(value = "size") Integer size);
+
+    /**
+     * 分页查询（千条记录内，使用此分页查询方法）
+     * @param offset 偏移量
+     * @param size 查询条数
+     * @return
+     */
+    @Select("select * from question where creator = ${id} limit ${offset},${size}")
+    List<Question> selectListPageByUserId(@Param(value = "id") long id, @Param(value = "offset") Integer offset , @Param(value = "size") Integer size);
 }

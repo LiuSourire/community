@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 
-<html xmlns:th="http://www.thymeleaf.org">
-
 <body>
 
-<div th:fragment="side">
+<div>
     <!--码问官方公众号-->
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 side">
         <h4>码问官方公众号</h4>

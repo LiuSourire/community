@@ -31,7 +31,7 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <#if (Session.user)??>
+                    <#if user?exists>
                         <li>
                             <a href="/publish">提问</a>
                         </li>
@@ -40,7 +40,7 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                                aria-expanded="false">
-                                <span>${Session.user.name!'张三'}</span>
+                                <span>${user.name}</span>
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">

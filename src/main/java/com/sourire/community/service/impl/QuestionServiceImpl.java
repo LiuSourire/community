@@ -69,4 +69,50 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         pagination.setQuestionDTOS(questionDTOS);
         return pagination;
     }
+
+    @Override
+    public Pagination<QuestionDTO> questionPageByUserId(long id, Integer current, Integer size) {
+        //查出记录总数
+        Integer total = questionMapper.selectCount(new QueryWrapper<Question>().eq("creator",id));
+        //创建分页对象
+        Pagination<QuestionDTO> pagination = new Pagination<>(current,size,total);
+        //计算偏移量
+        Integer offset = (pagination.getCurrent()-1) * size;
+        //查询list集合
+        List<QuestionDTO> questionDTOS = selectListPageByUserId(id,offset, size);
+        //将集合放入分页对象中
+        pagination.setQuestionDTOS(questionDTOS);
+        return pagination;
+    }
+
+    @Override
+    public QuestionDTO getQuestionById(Integer id) {
+        Question question = questionMapper.selectById(id);
+        QuestionDTO questionDTO = new QuestionDTO();
+        BeanUtils.copyProperties(question,questionDTO);
+        User user = userMapper.selectById(question.getCreator());
+        questionDTO.setUser(user);
+        return questionDTO;
+    }
+
+    @Override
+    public List<QuestionDTO> selectListPageByUserId(long id,Integer offset, Integer size) {
+        List<Question> questions = null;
+        //如果查询记录数在1000条之外，则使用高效分页方法
+        if (offset > 1000) {
+            questions = questionMapper.selectListPageByUserIdEffcient(id,offset, size);
+        } else {
+            questions = questionMapper.selectListPageByUserId(id,offset, size);
+        }
+        List<QuestionDTO> questionDTOS = new ArrayList<>();
+        for (Question question : questions) {
+            Long userId = question.getCreator();
+            User user = userMapper.selectOne(new QueryWrapper<User>().eq("id", userId));
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(question, questionDTO);
+            questionDTO.setUser(user);
+            questionDTOS.add(questionDTO);
+        }
+        return questionDTOS;
+    }
 }
