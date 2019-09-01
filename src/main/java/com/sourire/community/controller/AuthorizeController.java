@@ -50,19 +50,7 @@ public class AuthorizeController {
 
         //持久化登录态,如果获取到的github用户不为空，就保存到数据库里，并将token写入到cookie
         if(null != githubUser){
-            //判断是否为第一次登录
-            User user = userService.getOne(new QueryWrapper<User>().eq("account_id", githubUser.getId()));
-            if(user == null){
-                //如果是第一次登录，储存到数据库中
-                user = new User();
-                user.setAccountId(githubUser.getId());
-                user.setToken(UUID.randomUUID().toString());
-                user.setName(githubUser.getLogin());
-                user.setGmtCreate(new Date());
-                user.setAvatarUrl(githubUser.getAvatarUrl());
-                userService.save(user);
-            }
-            //不是第一次登录直接从数据库中取token
+            User user = userService.saveOrUpdate(githubUser);
             response.addCookie(new Cookie("token",user.getToken()));
         }
         return "redirect:/";
@@ -70,15 +58,12 @@ public class AuthorizeController {
 
     @RequestMapping("/logout")
     public String logout(HttpServletRequest req,HttpServletResponse response){
-        req.getSession().invalidate();
-        Cookie[] cookies = req.getCookies();
-        for (Cookie cookie : cookies) {
-            if("token".equals(cookie.getName())){
-                cookie.setMaxAge(0);
-                response.addCookie(cookie);
-                break;
-            }
-        }
+        //删除session中的user
+        req.getSession().removeAttribute("user");
+        //设置cookie失效
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
         return "redirect:/";
     }
 }
