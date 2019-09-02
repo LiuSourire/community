@@ -58,7 +58,7 @@ public class QuestionController {
                 return "redirect:/";
             }
             question.setCreator(user.getId());
-            questionService.save(question);
+            questionService.saveOrUpdate(question);
             return "redirect:/";
         }catch (Exception e){
             e.printStackTrace();
@@ -76,6 +76,14 @@ public class QuestionController {
         QuestionDTO questionDTO = questionService.getQuestionById(id);
         model.addAttribute("question",questionDTO);
         return "question";
+    }
+
+    @GetMapping("/publish/{id}")
+    public String editQuestion(@PathVariable("id") Integer id,
+                               Model model){
+        Question question = questionService.getById(id);
+        model.addAttribute("question",question);
+        return "publish";
     }
 
 }

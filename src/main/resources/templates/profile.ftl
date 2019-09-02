@@ -28,7 +28,9 @@
                                 <span class="text-desc"><span>${(question.commentCount)!0}</span> 个回复 •
                                 <span>${(question.viewCount)!0}</span> 次浏览 •
                                 <span>${question.gmtCreate?string("yyyy-MM-dd hh:mm:ss")}</span></span>
-                                <span class="glyphicon glyphicon-pencil" aria-hidden="true">编辑</span>
+                                <a class="community-menu" href="${base}/publish/${question.id}">
+                                    <span class="glyphicon glyphicon-pencil" aria-hidden="true">编辑</span>
+                                </a>
                             </div>
                         </div>
                     </div>

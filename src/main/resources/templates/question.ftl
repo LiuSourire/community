@@ -44,7 +44,7 @@
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <#if user?exists && user.id == question.creator>
-                    <a class="community-menu" href="${base}/publish/?id='+${question.id}}">
+                    <a class="community-menu" href="${base}/publish/${question.id}">
                         <span aria-hidden="true" class="glyphicon glyphicon-pencil">编辑</span>
                     </a>
                     </#if>
