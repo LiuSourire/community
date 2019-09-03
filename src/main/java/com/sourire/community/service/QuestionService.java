@@ -56,4 +56,6 @@ public interface QuestionService extends IService<Question> {
      * @return
      */
     public QuestionDTO getQuestionById(Integer id);
+
+    void incViewCount(Integer id);
 }

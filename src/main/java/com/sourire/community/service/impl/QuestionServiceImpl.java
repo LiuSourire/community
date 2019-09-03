@@ -101,6 +101,12 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     }
 
     @Override
+    public void incViewCount(Integer id) {
+        Question question = questionMapper.selectById(id);
+        questionMapper.updateViewCount(id);
+    }
+
+    @Override
     public List<QuestionDTO> selectListPageByUserId(long id,Integer offset, Integer size) {
         List<Question> questions = null;
         //如果查询记录数在1000条之外，则使用高效分页方法

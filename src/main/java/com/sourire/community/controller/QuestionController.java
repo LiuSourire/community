@@ -74,6 +74,7 @@ public class QuestionController {
                            Model model,
                            HttpServletRequest request){
         QuestionDTO questionDTO = questionService.getQuestionById(id);
+        questionService.incViewCount(questionDTO.getId());
         model.addAttribute("question",questionDTO);
         return "question";
     }

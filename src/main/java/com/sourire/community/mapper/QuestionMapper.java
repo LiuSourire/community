@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -54,4 +55,7 @@ public interface QuestionMapper extends BaseMapper<Question> {
      */
     @Select("select * from question where creator = ${id} limit ${offset},${size}")
     List<Question> selectListPageByUserId(@Param(value = "id") long id, @Param(value = "offset") Integer offset , @Param(value = "size") Integer size);
+
+    @Update("update question set view_count = view_count + 1 where id=${id}")
+    void updateViewCount(@Param(value = "id") Integer id);
 }
