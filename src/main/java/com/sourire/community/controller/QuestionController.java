@@ -4,6 +4,8 @@ package com.sourire.community.controller;
 import com.sourire.community.dto.QuestionDTO;
 import com.sourire.community.entity.Question;
 import com.sourire.community.entity.User;
+import com.sourire.community.exception.AppException;
+import com.sourire.community.exception.AppExceptionCode;
 import com.sourire.community.service.QuestionService;
 import com.sourire.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,8 +73,6 @@ public class QuestionController {
     public String question(@PathVariable("id") Integer id,
                            Model model,
                            HttpServletRequest request){
-        /*User user = (User) request.getSession().getAttribute("user");
-        model.addAttribute("user",user);*/
         QuestionDTO questionDTO = questionService.getQuestionById(id);
         model.addAttribute("question",questionDTO);
         return "question";
@@ -82,6 +82,9 @@ public class QuestionController {
     public String editQuestion(@PathVariable("id") Integer id,
                                Model model){
         Question question = questionService.getById(id);
+        if(question == null){
+            throw new AppException(AppExceptionCode.QUESTION_NOT_FOUND);
+        }
         model.addAttribute("question",question);
         return "publish";
     }

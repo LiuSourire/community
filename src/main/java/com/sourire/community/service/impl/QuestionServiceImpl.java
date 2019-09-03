@@ -7,6 +7,8 @@ import com.sourire.community.dto.Pagination;
 import com.sourire.community.dto.QuestionDTO;
 import com.sourire.community.entity.Question;
 import com.sourire.community.entity.User;
+import com.sourire.community.exception.AppException;
+import com.sourire.community.exception.AppExceptionCode;
 import com.sourire.community.mapper.QuestionMapper;
 import com.sourire.community.mapper.UserMapper;
 import com.sourire.community.service.QuestionService;
@@ -88,6 +90,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Override
     public QuestionDTO getQuestionById(Integer id) {
         Question question = questionMapper.selectById(id);
+        if (question == null){
+            throw new AppException(AppExceptionCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question,questionDTO);
         User user = userMapper.selectById(question.getCreator());
