@@ -11,9 +11,11 @@ import lombok.Getter;
 @Getter
 public class AppException extends RuntimeException {
 
+    private Integer code;
     private String message;
 
     public AppException(AppExceptionCode appExceptionCode){
+        this.code = appExceptionCode.getCode();
         this.message = appExceptionCode.getMessage();
     }
 }
