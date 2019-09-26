@@ -33,7 +33,8 @@ function comment2target(targetId, type, content) {
                 if (response.code == 2003) {
                     var isAccepted = confirm(response.message);
                     if (isAccepted) {
-                        window.open("https://github.com/login/oauth/authorize?client_id=2859958f9f059979ed3a&redirect_uri=" + document.location.origin + "/callback&scope=user&state=1");
+                        //window.open("https://github.com/login/oauth/authorize?client_id=Iv1.84767ed757986a3c&redirect_uri=" + document.location.origin + "/callback&scope=user&state=1");
+                        window.open("https://github.com/login/oauth/authorize?client_id=Iv1.84767ed757986a3c&redirect_uri=http://localhost:8897/callback&scope=user&state=1");
                         window.localStorage.setItem("closable", true);
                     }
                 } else {

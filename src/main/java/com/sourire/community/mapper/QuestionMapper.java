@@ -26,7 +26,7 @@ public interface QuestionMapper extends BaseMapper<Question> {
      * @param size 查询条数
      * @return
      */
-    @Select("select * from question limit ${offset},${size}")
+    @Select("select * from question order by id desc limit ${offset},${size} ")
     List<Question> selectListByPage(@Param(value = "offset") Integer offset , @Param(value = "size") Integer size);
 
     /**
@@ -35,7 +35,7 @@ public interface QuestionMapper extends BaseMapper<Question> {
      * @param size 查询条数
      * @return
      */
-    @Select("select * from question where id > (select id from question limit ${offset},1) limit ${size}")
+    @Select("select * from question where id > (select id from question limit ${offset},1) order by id desc limit ${size}")
     List<Question> selectListByPageEffcient(@Param(value = "offset") Integer offset , @Param(value = "size") Integer size);
 
     /**
@@ -44,7 +44,7 @@ public interface QuestionMapper extends BaseMapper<Question> {
      * @param size 查询条数
      * @return
      */
-    @Select("select * from question where creator = ${id} and id > (select id from question where creator = ${id} limit ${offset},1) limit ${size}")
+    @Select("select * from question where creator = ${id} and id > (select id from question where creator = ${id} limit ${offset},1) order by id desc limit ${size}")
     List<Question> selectListPageByUserIdEffcient(@Param(value = "id") long id, @Param(value = "offset") Integer offset , @Param(value = "size") Integer size);
 
     /**
@@ -53,7 +53,7 @@ public interface QuestionMapper extends BaseMapper<Question> {
      * @param size 查询条数
      * @return
      */
-    @Select("select * from question where creator = ${id} limit ${offset},${size}")
+    @Select("select * from question where creator = ${id} order by id desc limit ${offset},${size}")
     List<Question> selectListPageByUserId(@Param(value = "id") long id, @Param(value = "offset") Integer offset , @Param(value = "size") Integer size);
 
     @Update("update question set view_count = view_count + 1 where id=${id}")

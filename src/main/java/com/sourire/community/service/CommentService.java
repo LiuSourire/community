@@ -1,7 +1,10 @@
 package com.sourire.community.service;
 
+import com.sourire.community.dto.CommentDTO;
 import com.sourire.community.entity.Comment;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +15,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2019-09-09
  */
 public interface CommentService extends IService<Comment> {
+
+    List<CommentDTO> listByQuestionId(Integer id);
 
 }

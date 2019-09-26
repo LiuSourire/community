@@ -35,6 +35,8 @@ body {
     font-size: 12px;
     font-weight: normal;
     color: #999;
+    display: block;
+    margin-top: 21px;
 }
 
 .profile .section {
@@ -75,8 +77,7 @@ body {
 
 .community-menu {
     color: #999;
-    font-size: 13px;
-    margin-bottom: 15px;
+    font-size: 12px;
 }
 
 .jumbotron {

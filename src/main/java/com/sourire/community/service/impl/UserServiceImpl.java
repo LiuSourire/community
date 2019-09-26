@@ -8,6 +8,7 @@ import com.sourire.community.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.UUID;
@@ -26,6 +27,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private UserMapper userMapper;
 
     @Override
+    @Transactional
     public User saveOrUpdate(GithubUser entity) {
         User user = userMapper.selectOne(new QueryWrapper<User>().eq("account_id", entity.getId()));
         //如果该用户在数据库中不存在，则新增
