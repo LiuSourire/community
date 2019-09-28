@@ -3,7 +3,6 @@ package com.sourire.community.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sourire.community.dto.CommentDTO;
-import com.sourire.community.dto.ResultDTO;
 import com.sourire.community.entity.Comment;
 import com.sourire.community.entity.Question;
 import com.sourire.community.entity.User;
@@ -66,16 +65,20 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
                 throw new AppException(AppExceptionCode.COMMENT_NOT_FOUND);
             }
             isInsert = commentMapper.insert(entity);
+            //回复的是评论，则评论数+1
+            commentMapper.increaseCommentCount(entity.getParentId());
         }
 
         return isInsert>0;
     }
 
     @Override
-    public List<CommentDTO> listByQuestionId(Integer id) {
+    public List<CommentDTO> listByTargetId(Integer id, CommentTypeEnum typeEnum) {
         List<CommentDTO> comments = new ArrayList<>();
         //根据问题id作为父id，查询所有的评论
-        List<Comment> commentList = commentMapper.selectList(new QueryWrapper<Comment>().eq("parentId", id).orderByDesc("gmt_create"));
+        List<Comment> commentList = commentMapper.selectList(new QueryWrapper<Comment>()
+                .eq("parentId", id).eq("type", typeEnum.getType())
+                .orderByDesc("gmt_create"));
         //根据每个评论的用户id，查询对应的用户，并赋值给对应的commentDTO
         if(commentList != null && commentList.size()>0){
             for (Comment comment : commentList) {

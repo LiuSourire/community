@@ -50,6 +50,11 @@ public class CommentDTO {
     private String content;
 
     /**
+     * 点赞数
+     */
+    private Long commentCount;
+
+    /**
      * 发表评论用户对象
      */
     private User user;

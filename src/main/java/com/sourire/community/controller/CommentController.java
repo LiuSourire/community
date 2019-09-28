@@ -5,16 +5,16 @@ import com.sourire.community.dto.CommentDTO;
 import com.sourire.community.dto.ResultDTO;
 import com.sourire.community.entity.Comment;
 import com.sourire.community.entity.User;
+import com.sourire.community.enums.CommentTypeEnum;
 import com.sourire.community.exception.AppExceptionCode;
 import com.sourire.community.service.CommentService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -36,6 +36,9 @@ public class CommentController {
         if(user == null){
             return ResultDTO.errorOf(AppExceptionCode.NO_LOGIN);
         }
+        if(commentDTO == null  || StringUtils.isBlank(commentDTO.getContent())){
+            return ResultDTO.errorOf(AppExceptionCode.CONTENT_NOT_EMPTY);
+        }
         Comment comment = new Comment();
         comment.setParentId(commentDTO.getParentId());
         comment.setContent(commentDTO.getContent());
@@ -46,5 +49,13 @@ public class CommentController {
         return ResultDTO.okOf();
     }
 
+    /**
+     * 获取二级评论
+     */
+    @GetMapping("/comment/{id}")
+    public ResultDTO comments(@PathVariable Integer id){
+        List<CommentDTO> commentDTOS = commentService.listByTargetId(id, CommentTypeEnum.COMMENT_FIRST);
+        return ResultDTO.okOf(commentDTOS);
+    }
 }
 

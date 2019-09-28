@@ -64,6 +64,10 @@ private static final long serialVersionUID=1L;
      */
     private String content;
 
+    /**
+     * 点赞数
+     */
+    private Long commentCount;
 
     @Override
     protected Serializable pkVal() {

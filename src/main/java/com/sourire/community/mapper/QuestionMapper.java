@@ -61,4 +61,7 @@ public interface QuestionMapper extends BaseMapper<Question> {
 
     @Update("update question set comment_count = comment_count +1 where id = ${id}")
     void increaseCommentCount(@Param(value = "id") Integer id);
+
+    @Select("select * from question where tag regexp '${tag}' and id != ${id}")
+    List<Question> listRelatedByTags(@Param(value = "id") Integer id, @Param(value = "tag") String regexpTags);
 }

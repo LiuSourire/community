@@ -26,30 +26,32 @@
             </span>
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display: block">
 
+                <!--标签-->
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <#list question.tag?split(",") as subtag>
+                        <span class="label label-info question-tag">
+                            <span class="glyphicon glyphicon-tags"></span>
+                            <span class="label label-info">${subtag}</span>
+                        </span>
+                    </#list>
+                </div>
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
                 <!--内容-->
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="question-view">
                     <textarea style="display:none;">${question.description}</textarea>
                 </div>
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <script type="text/javascript">
                     $(function () {
                         editormd.markdownToHTML("question-view", {});
                     });
                 </script>
-
-                <!--标签-->
-                <#--<hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <span class="label label-info question-tag" th:each="tag : ${question.tag.split(',')}">
-                        <span class="glyphicon glyphicon-tags"></span>
-                        <span class="label label-info" th:text="${tag}"></span>
-                    </span>
-                </div>-->
-
             </div>
 
             <!--回复-->
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <h4>
+                <h4 style="margin-bottom: 23px;">
                     <span>${(question.commentCount)!0}</span> 个回复
                 </h4>
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment-sp">
@@ -68,12 +70,15 @@
                             </h5>
                             <div>${comment.content}</div>
                             <div class="menu">
-                                <span class="glyphicon glyphicon-thumbs-up icon"></span>
-                                <span class="comment-icon"
-                                      onclick="collapseComments(this)" data-id="${comment.id}">
-                                    <span class="glyphicon glyphicon-comment"></span>
-                                    <#--<span>${comment.commentCount}</span>-->
+                                <span class="operate">
+                                    <span class="glyphicon glyphicon-thumbs-up"></span>
+                                    0
                                 </span>
+                                <span class="operate" onclick="collapseComments(this)" data-id="${comment.id}">
+                                    <span class="glyphicon glyphicon-comment"></span>
+                                    ${comment.commentCount}
+                                </span>
+
                                 <span class="pull-right">${comment.gmtCreate?string("yyyy-MM-dd HH:mm")}</span>
                             </div>
                             <!--二级评论-->
@@ -95,7 +100,7 @@
 
             <!--回复输入框-->
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <h4>
+                <h4 style="margin-bottom: 20px;">
                     提交回复
                 </h4>
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment-sp">
@@ -145,11 +150,13 @@
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h4>相关问题</h4>
-                <#--<ul class="question-related">
-                    <li th:each="related : ${relatedQuestions}">
-                        <a th:href="@{'/question/'+ ${related.id}}" th:text="${related.title}"></a>
-                    </li>
-                </ul>-->
+                <ul class="question-related">
+                    <#list relatedQuestions as related>
+                        <li>
+                            <a href="/question/${related.id}">${related.title}</a>
+                        </li>
+                    </#list>
+                </ul>
             </div>
         </div>
     </div>

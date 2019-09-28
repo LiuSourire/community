@@ -1,7 +1,6 @@
 package com.sourire.community.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sourire.community.dto.Pagination;
 import com.sourire.community.dto.QuestionDTO;
@@ -12,12 +11,16 @@ import com.sourire.community.exception.AppExceptionCode;
 import com.sourire.community.mapper.QuestionMapper;
 import com.sourire.community.mapper.UserMapper;
 import com.sourire.community.service.QuestionService;
+import freemarker.core.ReturnInstruction;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -64,7 +67,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         //创建分页对象
         Pagination<QuestionDTO> pagination = new Pagination<>(currentPage,size,total);
         //计算偏移量
-        Integer offset = (pagination.getCurrent()-1) * size;
+        Integer offset = ((pagination.getCurrent() - 1) == -1 ? 0 : (pagination.getCurrent() - 1)) * size;
         //查询list集合
         List<QuestionDTO> questionDTOS = selectListByPage(offset, size);
         //将集合放入分页对象中
@@ -104,6 +107,24 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     public void incViewCount(Integer id) {
         Question question = questionMapper.selectById(id);
         questionMapper.updateViewCount(id);
+    }
+
+    /**
+     * 根据标签匹配相关问题
+     * @param queryDTO
+     * @return
+     */
+    @Override
+    public List<QuestionDTO> listRelatedByTags(QuestionDTO queryDTO) {
+        String[] tags = StringUtils.split(queryDTO.getTag(), ",");
+        String regexpTags = Arrays.stream(tags).collect(Collectors.joining("|"));
+        List<Question> questions = questionMapper.listRelatedByTags(queryDTO.getId(), regexpTags);
+        List<QuestionDTO> questionDTOS = questions.stream().map(q -> {
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(q,questionDTO);
+            return questionDTO;
+        }).collect(Collectors.toList());
+        return questionDTOS;
     }
 
     @Override

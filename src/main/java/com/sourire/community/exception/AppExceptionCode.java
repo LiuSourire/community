@@ -34,7 +34,12 @@ public enum AppExceptionCode implements IAppExceptionCode{
     /**
      * 评论不存在
      */
-    COMMENT_NOT_FOUND(1006,"你回复的评论不存在，换个试试吧~~~");
+    COMMENT_NOT_FOUND(1006,"你回复的评论不存在，换个试试吧~~~"),
+    /**
+     * ;
+     * 回复的内容为空
+     */
+    CONTENT_NOT_EMPTY(1007, "回复的内容不能为空");
 
     private Integer code;
     private String message;

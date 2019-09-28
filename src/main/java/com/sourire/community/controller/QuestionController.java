@@ -5,6 +5,7 @@ import com.sourire.community.dto.CommentDTO;
 import com.sourire.community.dto.QuestionDTO;
 import com.sourire.community.entity.Question;
 import com.sourire.community.entity.User;
+import com.sourire.community.enums.CommentTypeEnum;
 import com.sourire.community.exception.AppException;
 import com.sourire.community.exception.AppExceptionCode;
 import com.sourire.community.service.CommentService;
@@ -81,9 +82,12 @@ public class QuestionController {
         //增加浏览数
         questionService.incViewCount(questionDTO.getId());
         //加载评论列表
-        List<CommentDTO> comments= commentService.listByQuestionId(id);
+        List<CommentDTO> comments= commentService.listByTargetId(id, CommentTypeEnum.QUESTION);
+        //加载相关问题
+        List<QuestionDTO> relatedQuestions =  questionService.listRelatedByTags(questionDTO);
         model.addAttribute("question", questionDTO);
         model.addAttribute("comments", comments);
+        model.addAttribute("relatedQuestions", relatedQuestions);
         return "question";
     }
 

@@ -38,64 +38,70 @@
                     <a th:href="@{/(sort='no')}" class="red">消灭零回复</a>
                 </li>
             </ul>-->
-            <#list pagination.questionDTOS as question>
+            <#if pagination.total == 0>
                 <div class="media">
-                    <div class="media-left">
-                        <a href="#">
-                            <img class="media-object img-rounded"
-                                 src="${question.user.avatarUrl}">
-                        </a>
-                    </div>
-                    <div class="media-body">
-                        <h4 class="media-heading">
-                            <a href="${base}/question/${question.id}">${question.title}</a>
-                        </h4>
-                        <span class="text-desc"><span>${(question.commentCount)!0}</span> 个回复 •
-                            <span>${(question.viewCount)!0}</span> 次浏览 •
-                            <span>${question.gmtCreate?string("yyyy-MM-dd hh:mm:ss")}</span></span>
-                    </div>
+                    还没有人提出问题啊~~~~
                 </div>
-            </#list>
-            <nav aria-label="Page navigation">
-                <ul class="pagination">
-                    <#if pagination.showFirstPage>
-                        <li>
-                            <a href="/?current=1" aria-label="Previous">
-                                <span aria-hidden="true">&lt;&lt;</span>
+            <#else>
+                <#list pagination.questionDTOS as question>
+                    <div class="media">
+                        <div class="media-left">
+                            <a href="#">
+                                <img class="media-object img-rounded"
+                                     src="${question.user.avatarUrl}">
                             </a>
-                        </li>
-                    </#if>
-                    <#if pagination.showPrev>
-                        <li>
-                            <a href="/?current=${pagination.current - 1}"
-                               aria-label="Previous">
-                                <span aria-hidden="true">&lt;</span>
-                            </a>
-                        </li>
-                    </#if>
-                    <#list pagination.pages as page>
-                        <li ${(pagination.current == page)?string("class='active'","")}>
-                            <a href="/?current=${page}" >${page}</a>
-                        </li>
-                    </#list>
-                    <#if pagination.showNext>
-                        <li>
-                            <a href="/?current=${pagination.current +1 }"
-                               aria-label="Previous">
-                                <span aria-hidden="true">&gt;</span>
-                            </a>
-                        </li>
-                    </#if>
-                    <#if pagination.showLastPage>
-                        <li>
-                            <a href="/?current=${pagination.totalPage}"
-                               aria-label="Previous">
-                                <span aria-hidden="true">&gt;&gt;</span>
-                            </a>
-                        </li>
-                    </#if>
-                </ul>
-            </nav>
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading">
+                                <a href="${base}/question/${question.id}">${question.title}</a>
+                            </h4>
+                            <span class="text-desc"><span>${(question.commentCount)!0}</span> 个回复 •
+                            <span>${(question.viewCount)!0}</span> 次浏览 •
+                            <span>${question.gmtCreate?string("yyyy-MM-dd HH:mm:ss")}</span></span>
+                        </div>
+                    </div>
+                </#list>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <#if pagination.showFirstPage>
+                            <li>
+                                <a href="/?current=1" aria-label="Previous">
+                                    <span aria-hidden="true">&lt;&lt;</span>
+                                </a>
+                            </li>
+                        </#if>
+                        <#if pagination.showPrev>
+                            <li>
+                                <a href="/?current=${pagination.current - 1}"
+                                   aria-label="Previous">
+                                    <span aria-hidden="true">&lt;</span>
+                                </a>
+                            </li>
+                        </#if>
+                        <#list pagination.pages as page>
+                            <li ${(pagination.current == page)?string("class='active'","")}>
+                                <a href="/?current=${page}" >${page}</a>
+                            </li>
+                        </#list>
+                        <#if pagination.showNext>
+                            <li>
+                                <a href="/?current=${pagination.current +1 }"
+                                   aria-label="Previous">
+                                    <span aria-hidden="true">&gt;</span>
+                                </a>
+                            </li>
+                        </#if>
+                        <#if pagination.showLastPage>
+                            <li>
+                                <a href="/?current=${pagination.totalPage}"
+                                   aria-label="Previous">
+                                    <span aria-hidden="true">&gt;&gt;</span>
+                                </a>
+                            </li>
+                        </#if>
+                    </ul>
+                </nav>
+            </#if>
         </div>
         <#--<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <div th:insert="~{side :: side}"></div>

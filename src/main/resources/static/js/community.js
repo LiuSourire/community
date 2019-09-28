@@ -30,7 +30,7 @@ function comment2target(targetId, type, content) {
             if (response.code == 200) {
                 window.location.reload();
             } else {
-                if (response.code == 2003) {
+                if (response.code == 1003) {
                     var isAccepted = confirm(response.message);
                     if (isAccepted) {
                         //window.open("https://github.com/login/oauth/authorize?client_id=Iv1.84767ed757986a3c&redirect_uri=" + document.location.origin + "/callback&scope=user&state=1");
@@ -95,7 +95,7 @@ function collapseComments(e) {
                         "class": "menu"
                     }).append($("<span/>", {
                         "class": "pull-right",
-                        "html": moment(comment.gmtCreate).format('YYYY-MM-DD')
+                        "html": moment(comment.gmtCreate).format('YYYY-MM-DD HH:mm')
                     })));
 
                     var mediaElement = $("<div/>", {

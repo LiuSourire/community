@@ -2,6 +2,8 @@ package com.sourire.community.mapper;
 
 import com.sourire.community.entity.Comment;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * <p>
@@ -13,4 +15,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface CommentMapper extends BaseMapper<Comment> {
 
+    @Update("update comment set comment_count = comment_count+1 where id = ${id}")
+    void increaseCommentCount(@Param(value = "id") Integer id);
 }
