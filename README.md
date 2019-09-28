@@ -1,5 +1,13 @@
 ### 爪巴社区
 #### 仿照“码匠笔记”视频搭建的个人练习项目
 
-#### 参考文档
-[springweb文档](https://docs.spring.io/spring/docs/5.1.9.RELEASE/spring-framework-reference/web.html#spring-web~~~~~~~~)
+##### 框架
+前端--[bootstrap](https://www.bootcss.com/)  
+后端--[springboot](https://spring.io/projects/spring-boot/)  
+数据库--[mysql](https://www.mysql.com/)
+
+##### 工具
+[lombok](https://projectlombok.org/)  
+[okhttp](https://square.github.io/okhttp/)  
+[flyway](https://flywaydb.org/)  
+

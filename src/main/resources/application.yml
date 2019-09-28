@@ -17,7 +17,12 @@ spring:
     username: root
     password: root
     url: jdbc:mysql://localhost:3306/community?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2b8
-
+  flyway:
+    enabled: true
+    clean-disabled: true
+    encoding: utf-8
+    locations: classpath:db/migration/
+    baseline-on-migrate: true
 
 #配置mybatis-plus
 mybatis-plus:
@@ -27,7 +32,6 @@ mybatis-plus:
   mapper-locations: classpath:com/sourire/community/xml/*.xml
   configuration:
     jdbc-type-for-null: null
-    global-config:
-      # 关闭 mybatis-plus的 banner
-      banner: false
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    banner: false
