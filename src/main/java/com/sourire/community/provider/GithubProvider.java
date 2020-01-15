@@ -6,14 +6,33 @@ import com.sourire.community.dto.GithubUser;
 import okhttp3.*;
 import org.springframework.stereotype.Component;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSession;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
+import static com.sourire.community.provider.TrustAllCerts.createSSLSocketFactory;
 
 @Component
 public class GithubProvider {
-    public static final MediaType mediaType = MediaType.get("application/json; charset=utf-8");
+    private static final MediaType mediaType = MediaType.get("application/json; charset=utf-8");
+
+    private static OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+    static {
+        builder.connectTimeout(60, TimeUnit.SECONDS);
+        builder.sslSocketFactory(createSSLSocketFactory());
+        builder.hostnameVerifier(new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        });
+    }
+
+    private OkHttpClient client = builder.build();
 
     public String getAccessToken(AccessTokenDTO accessTokenDTO){
-        OkHttpClient client = new OkHttpClient();
         RequestBody body = RequestBody.create(mediaType, JSON.toJSONString(accessTokenDTO));
         Request request = new Request.Builder()
                 .url("https://github.com/login/oauth/access_token")
@@ -30,7 +49,6 @@ public class GithubProvider {
     }
 
     public GithubUser getUser(String accessToken){
-        OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url("https://api.github.com/user?access_token="+accessToken)
                 .build();
