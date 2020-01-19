@@ -59,5 +59,9 @@ public interface QuestionService extends IService<Question> {
 
     void incViewCount(Integer id);
 
+    void updateViewCount(Integer id,Long num);
+
+    Long getViewCount(Integer id);
+
     List<QuestionDTO> listRelatedByTags(QuestionDTO questionDTO);
 }

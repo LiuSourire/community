@@ -56,8 +56,8 @@ public interface QuestionMapper extends BaseMapper<Question> {
     @Select("select * from question where creator = ${id} order by id desc limit ${offset},${size}")
     List<Question> selectListPageByUserId(@Param(value = "id") long id, @Param(value = "offset") Integer offset , @Param(value = "size") Integer size);
 
-    @Update("update question set view_count = view_count + 1 where id=${id}")
-    void updateViewCount(@Param(value = "id") Integer id);
+    @Update("update question set view_count = ${num} where id=${id}")
+    void updateViewCount(@Param(value = "id") Integer id,@Param(value = "num")Long num);
 
     @Update("update question set comment_count = comment_count +1 where id = ${id}")
     void increaseCommentCount(@Param(value = "id") Integer id);

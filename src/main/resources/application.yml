@@ -1,3 +1,4 @@
+
 # 设定ftl文件路径
 freemarker:
   template-loader-path: classpath:/templates/
@@ -12,6 +13,9 @@ freemarker:
 
 #配置数据源
 spring:
+  devtools:
+    restart:
+      enabled: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
@@ -23,6 +27,70 @@ spring:
     encoding: utf-8
     locations: classpath:db/migration/
     baseline-on-migrate: true
+  #redis
+  redis:
+    host: localhost
+    # 连接超时时间（记得添加单位，Duration）
+    timeout: 10000ms
+    # Redis默认情况下有16个分片，这里配置具体使用的分片
+    # database: 0
+    lettuce:
+      pool:
+        # 连接池最大连接数（使用负值表示没有限制） 默认 8
+        max-active: 8
+        # 连接池最大阻塞等待时间（使用负值表示没有限制） 默认 -1
+        max-wait: -1ms
+        # 连接池中的最大空闲连接 默认 8
+        max-idle: 8
+        # 连接池中的最小空闲连接 默认 0
+        min-idle: 0
+    cache:
+      # 一般来说是不用配置的，Spring Cache 会根据依赖的包自行装配
+      type: redis
+  logging:
+    level:
+      com.sourire: debug
+#swagger
+  swagger:
+    enabled: true
+    title: community
+    base-package: com.sourire.community.controller
+    description: communityApi
+    version: 1.0.0-SNAPSHOT
+    contact:
+      name: sourire
+      email: 1027169607@qq.com
+      url: http://localhost:8897/
+    # swagger扫描的基础包，默认：全扫描
+    # base-package:
+    # 需要处理的基础URL规则，默认：/**
+    # base-path:
+    # 需要排除的URL规则，默认：空
+    # exclude-path:
+    security:
+      # 是否启用 swagger 登录验证
+      filter-plugin: true
+      username: sourire
+      password: 123456
+    global-response-messages:
+      GET[0]:
+        code: 400
+        message: Bad Request，一般为请求参数不对
+      GET[1]:
+        code: 404
+        message: NOT FOUND，一般为请求路径不对
+      GET[2]:
+        code: 500
+        message: ERROR，一般为程序内部错误
+      POST[0]:
+        code: 400
+        message: Bad Request，一般为请求参数不对
+      POST[1]:
+        code: 404
+        message: NOT FOUND，一般为请求路径不对
+      POST[2]:
+        code: 500
+        message: ERROR，一般为程序内部错误
 
 #配置mybatis-plus
 mybatis-plus:
@@ -35,3 +103,4 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     banner: false
+#debug: true

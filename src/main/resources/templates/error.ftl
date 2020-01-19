@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <#assign base=springMacroRequestContext.contextPath>
 <head>
-    <title>码匠社区</title>
+    <title>过程PROCESS</title>
     <#include "${base}/import.ftl">
 </head>
 <body>

@@ -10,9 +10,9 @@
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                         data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">爪巴社区</span>
+                    <span class="sr-only">过程PROCESS</span>
                 </button>
-                <a class="navbar-brand" href="/">爪巴社区</a>
+                <a class="navbar-brand" href="/">过程PROCESS</a>
             </div>
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">

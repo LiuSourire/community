@@ -3,7 +3,7 @@
 
 
 <head>
-    <title>发布 - 爪巴社区</title>
+    <title>发布 - 过程PROCESS</title>
     <#include "${base}/import.ftl">
 </head>
 <body>

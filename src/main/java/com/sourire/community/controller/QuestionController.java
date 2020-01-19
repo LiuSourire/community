@@ -10,6 +10,9 @@ import com.sourire.community.exception.AppException;
 import com.sourire.community.exception.AppExceptionCode;
 import com.sourire.community.service.CommentService;
 import com.sourire.community.service.QuestionService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +33,8 @@ import java.util.List;
  * @since 2019-08-28
  */
 @Controller
+@Slf4j
+@Api(value = "问题管理接口",tags = "1.0.0_SNAPSHOT")
 public class QuestionController {
 
     @Autowired
@@ -39,6 +44,7 @@ public class QuestionController {
     private CommentService commentService;
 
     @GetMapping("/publish")
+    @ApiOperation(value = "跳转到问题页面",notes = "备注")
     public String publish() {
         return "publish";
     }
@@ -78,9 +84,9 @@ public class QuestionController {
     @GetMapping("/question/{id}")
     public String question(@PathVariable("id") Integer id,
                            Model model) {
-        QuestionDTO questionDTO = questionService.getQuestionById(id);
         //增加浏览数
-        questionService.incViewCount(questionDTO.getId());
+        questionService.incViewCount(id);
+        QuestionDTO questionDTO = questionService.getQuestionById(id);
         //加载评论列表
         List<CommentDTO> comments= commentService.listByTargetId(id, CommentTypeEnum.QUESTION);
         //加载相关问题

@@ -16,7 +16,7 @@
                 <h4 class="question-title"><span>${question.title}</span></h4>
                 <span class="text-desc">
                 作者：<span>${question.user.name}</span> |
-                发布时间：<span>${question.gmtCreate?string("yyyy-MM-dd hh:mm")}</span> |
+                发布时间：<span>${question.gmtCreate?string("yyyy-MM-dd HH:mm")}</span> |
                 阅读数： <span>${(question.viewCount)!0}</span>
                 <#if user?exists && user.id == question.creator>
                     <a class="community-menu pull-right" href="${base}/publish/${question.id}">

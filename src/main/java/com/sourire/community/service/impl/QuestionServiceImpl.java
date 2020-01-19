@@ -1,5 +1,6 @@
 package com.sourire.community.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sourire.community.dto.Pagination;
@@ -11,10 +12,12 @@ import com.sourire.community.exception.AppExceptionCode;
 import com.sourire.community.mapper.QuestionMapper;
 import com.sourire.community.mapper.UserMapper;
 import com.sourire.community.service.QuestionService;
-import freemarker.core.ReturnInstruction;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,6 +34,7 @@ import java.util.stream.Collectors;
  * @since 2019-08-28
  */
 @Service
+@Slf4j
 public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> implements QuestionService {
 
     @Autowired
@@ -38,6 +42,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 
     @Autowired
     private QuestionMapper questionMapper;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @Override
     public List<QuestionDTO> selectListByPage(Integer offset ,Integer size){
@@ -52,9 +59,12 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         for (Question question : questions) {
             Long userId = question.getCreator();
             User user = userMapper.selectOne(new QueryWrapper<User>().eq("id", userId));
+
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);
             questionDTO.setUser(user);
+            //获取浏览数
+            questionDTO.setViewCount(getViewCount(question.getId()));
             questionDTOS.add(questionDTO);
         }
         return questionDTOS;
@@ -100,13 +110,40 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         BeanUtils.copyProperties(question,questionDTO);
         User user = userMapper.selectById(question.getCreator());
         questionDTO.setUser(user);
+        questionDTO.setViewCount(getViewCount(id));
         return questionDTO;
     }
 
     @Override
     public void incViewCount(Integer id) {
         Question question = questionMapper.selectById(id);
-        questionMapper.updateViewCount(id);
+        //使用redis缓存  将浏览数存在缓存中  每次浏览就加1 定时写入到数据库中
+        String key = "viewCount:question:"+id;
+        ValueOperations<String, String> redisString = stringRedisTemplate.opsForValue();
+        //判断是否有这个缓存key存在
+        if(StrUtil.isBlank(redisString.get(key))) {
+            redisString.set(key,String.valueOf(question.getViewCount()));
+        }
+        log.debug("【redis缓存】:key:{}",key);
+        redisString.increment(key, 1);
+    }
+
+    @Override
+    public void updateViewCount(Integer id,Long num) {
+        questionMapper.updateViewCount(id,num);
+    }
+
+    @Override
+    public Long getViewCount(Integer id) {
+        String key = "viewCount:question:"+id;
+        ValueOperations<String, String> redisString = stringRedisTemplate.opsForValue();
+        //判断是否有这个缓存key存在
+        String count = redisString.get(key);
+        if(!StrUtil.isBlank(count)) {
+            return Long.valueOf(count);
+        }else{
+           return questionMapper.selectById(id).getViewCount();
+        }
     }
 
     /**
